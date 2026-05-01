@@ -22,7 +22,7 @@ import lombok.Setter;
 public abstract class BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // IDENTITY = PostgreSQL BIGSERIAL
     private Long id;
 
     @CreatedDate
