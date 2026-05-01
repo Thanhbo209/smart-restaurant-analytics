@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/restaurant_analytics
+    username: restaurant_user
+    password: dev_password
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+
+logging:
+  level:
+    com.thanhpham.smart_restaurant_analytics: DEBUG
+    org.hibernate.SQL: DEBUG
