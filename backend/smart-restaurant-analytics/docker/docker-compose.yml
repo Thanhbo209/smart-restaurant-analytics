@@ -1,0 +1,20 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    container_name: restaurant_postgres_dev
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: restaurant_analytics
+      POSTGRES_USER: restaurant_user
+      POSTGRES_PASSWORD: dev_password
+
+    ports:
+      - "5433:5432"
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+
+volumes:
+  postgres_data:
