@@ -3,6 +3,7 @@ services:
     image: postgres:15-alpine
     container_name: restaurant_postgres_dev
     restart: unless-stopped
+    command: ["postgres", "-c", "shared_preload_libraries=pg_stat_statements"]
 
     environment:
       POSTGRES_DB: restaurant_analytics
