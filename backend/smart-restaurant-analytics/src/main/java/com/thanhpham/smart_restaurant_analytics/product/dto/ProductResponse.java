@@ -20,13 +20,14 @@ public class ProductResponse {
     private String description;
     private BigDecimal price;
     private BigDecimal cost; // present in response — admin hides it in UI if needed
-    private Integer stock;
     private String imageUrl;
     private Boolean isActive;
     private Boolean isAvailable;
     private CategoryResponse category; // embedded — avoids extra round-trip for category name
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    private Long categoryId;
+    private String categoryName;
 
     public static ProductResponse from(Product product) {
         return ProductResponse.builder()
@@ -37,13 +38,11 @@ public class ProductResponse {
                 .description(product.getDescription())
                 .price(product.getPrice())
                 .cost(product.getCost())
-                .stock(product.getStock())
                 .imageUrl(product.getImageUrl())
                 .isActive(product.getIsActive())
                 .isAvailable(product.getIsAvailable())
-                // category is LAZY — only safe to call here if the caller
-                // used @EntityGraph or join fetch in the repository
-                .category(CategoryResponse.from(product.getCategory()))
+                .categoryId(product.getCategory().getId())
+                .categoryName(product.getCategory().getName())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(product.getUpdatedAt())
                 .build();

@@ -1,7 +1,6 @@
 package com.thanhpham.smart_restaurant_analytics.category.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 import com.thanhpham.smart_restaurant_analytics.category.model.Category;
 
@@ -23,7 +22,7 @@ public class CategoryResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static CategoryResponse from(Category category) {
+    public static CategoryResponse from(Category category, int childCount) {
         return CategoryResponse.builder()
                 .id(category.getId())
                 .name(category.getName())
@@ -32,7 +31,7 @@ public class CategoryResponse {
                 .isActive(category.getIsActive())
                 .parentId(category.getParent() != null ? category.getParent().getId() : null)
                 .parentName(category.getParent() != null ? category.getParent().getName() : null)
-                .childCount(category.getChildren().size())
+                .childCount(childCount)
                 .createdAt(category.getCreatedAt())
                 .updatedAt(category.getUpdatedAt())
                 .build();
