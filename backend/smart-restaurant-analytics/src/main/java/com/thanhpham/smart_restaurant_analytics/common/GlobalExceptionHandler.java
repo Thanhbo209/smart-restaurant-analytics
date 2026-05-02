@@ -45,7 +45,8 @@ public class GlobalExceptionHandler {
                 .stream()
                 .collect(Collectors.toMap(
                         FieldError::getField,
-                        fe -> Objects.requireNonNullElse(fe.getDefaultMessage(), "Invalid value")));
+                        fe -> Objects.requireNonNullElse(fe.getDefaultMessage(), "Invalid value"),
+                        (first, second) -> first));
 
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiResponse.<Map<String, String>>builder()
