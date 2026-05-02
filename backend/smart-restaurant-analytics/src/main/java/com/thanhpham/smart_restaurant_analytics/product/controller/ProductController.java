@@ -9,6 +9,7 @@ import com.thanhpham.smart_restaurant_analytics.product.service.ProductService;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
@@ -16,11 +17,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
+@Validated
 @RequestMapping("/api/v1/products")
 @RequiredArgsConstructor // DI
 public class ProductController {
@@ -32,7 +35,7 @@ public class ProductController {
             @RequestParam(defaultValue = "0") @Min(0) int page,
             @RequestParam(defaultValue = "20") @Min(1) @Max(100) int size,
             @RequestParam(defaultValue = "createdAt") String sortBy,
-            @RequestParam(defaultValue = "desc") String direction,
+            @RequestParam(defaultValue = "desc") @Pattern(regexp = "(?i)^(asc|desc)$", message = "direction must be asc or desc") String direction,
             @RequestParam(required = false) String search) {
 
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
