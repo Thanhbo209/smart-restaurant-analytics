@@ -11,9 +11,6 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -33,11 +30,10 @@ public class Product extends BaseEntity {
     @Column(nullable = false, length = 200)
     private String slug;
 
-    @NotNull
-    @Positive
+    @Column(nullable = false)
     private BigDecimal price;
 
-    @PositiveOrZero
+    @Column(nullable = false)
     private BigDecimal cost; // purchase cost use for margin analytics, temporary truth
 
     @Column(columnDefinition = "TEXT")
