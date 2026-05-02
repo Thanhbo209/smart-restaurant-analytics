@@ -11,10 +11,12 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import com.thanhpham.smart_restaurant_analytics.exception.BusinessRuleException;
 import com.thanhpham.smart_restaurant_analytics.exception.ResourceNotFoundException;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
@@ -55,6 +57,17 @@ public class GlobalExceptionHandler {
                         .data(errors)
                         .timestamp(LocalDateTime.now())
                         .build());
+    }
+
+    @ExceptionHandler({
+            ConstraintViolationException.class,
+            MethodArgumentTypeMismatchException.class
+    })
+
+    public ResponseEntity<ApiResponse<Void>> handleBadRequest(Exception ex) {
+        log.warn("Bad request: {}", ex.getMessage());
+        return ResponseEntity.badRequest()
+                .body(ApiResponse.error("Invalid request"));
     }
 
     @ExceptionHandler(Exception.class)
