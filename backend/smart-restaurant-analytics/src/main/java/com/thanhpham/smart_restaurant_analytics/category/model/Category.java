@@ -1,7 +1,9 @@
 package com.thanhpham.smart_restaurant_analytics.category.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.thanhpham.smart_restaurant_analytics.common.BaseEntity;
 import com.thanhpham.smart_restaurant_analytics.product.model.Product;
@@ -41,7 +43,7 @@ public class Category extends BaseEntity {
     private Category parent;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    private List<Category> children = new ArrayList<>();
+    private Set<Category> children = new HashSet<>();
 
     @OneToMany(mappedBy = "category", fetch = FetchType.LAZY)
     private List<Product> products = new ArrayList<>();
