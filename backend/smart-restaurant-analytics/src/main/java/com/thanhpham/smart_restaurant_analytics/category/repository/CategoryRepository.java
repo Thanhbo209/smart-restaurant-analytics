@@ -43,6 +43,7 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
 
     boolean existsBySlugAndIdNot(String slug, Long id);
 
+    boolean existsByParentId(Long parentId);
     // ---PATCH
 
     @Modifying

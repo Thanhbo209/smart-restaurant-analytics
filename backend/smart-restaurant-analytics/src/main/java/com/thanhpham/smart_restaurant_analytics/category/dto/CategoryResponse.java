@@ -22,6 +22,10 @@ public class CategoryResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
+    public static CategoryResponse from(Category category) {
+        return from(category, category.getChildren().size());
+    }
+
     public static CategoryResponse from(Category category, int childCount) {
         return CategoryResponse.builder()
                 .id(category.getId())
