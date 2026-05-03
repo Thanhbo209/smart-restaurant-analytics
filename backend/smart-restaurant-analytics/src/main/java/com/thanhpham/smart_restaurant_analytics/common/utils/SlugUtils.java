@@ -4,8 +4,8 @@ import java.text.Normalizer;
 
 public class SlugUtils {
     public static String toSlug(String input) {
-        if (input == null || input.isEmpty())
-            return "";
+        if (input == null || input.isBlank())
+            throw new IllegalArgumentException("Slug input must not be blank");
 
         // Remove accents (Vietnamese safe)
         String normalized = Normalizer.normalize(input, Normalizer.Form.NFD)
