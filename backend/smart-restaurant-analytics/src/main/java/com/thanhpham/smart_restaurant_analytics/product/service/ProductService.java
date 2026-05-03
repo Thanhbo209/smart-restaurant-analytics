@@ -88,7 +88,7 @@ public class ProductService {
         helper.validateSkuUniqueness(req.getSku(), null);
 
         Product product = new Product();
-        helper.mapRequestToEntity(req, product, category, slug);
+        helper.mapRequestToEntity(req, product, category, slug, true);
 
         Product savedProduct = productRepository.save(product);
         log.info("Product created: id={}, slug={}", savedProduct.getId(), savedProduct.getSlug());
@@ -105,7 +105,7 @@ public class ProductService {
         String slug = helper.generateUniqueSlug(request.getName(), id);
         helper.validateSkuUniqueness(request.getSku(), id);
 
-        helper.mapRequestToEntity(request, product, category, slug);
+        helper.mapRequestToEntity(request, product, category, slug, false);
 
         Product saved = productRepository.save(product);
         log.info("Product updated: id={}", saved.getId());

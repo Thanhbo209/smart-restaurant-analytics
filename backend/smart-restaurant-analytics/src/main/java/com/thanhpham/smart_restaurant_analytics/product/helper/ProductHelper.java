@@ -59,7 +59,8 @@ public class ProductHelper {
     }
 
     public void mapRequestToEntity(ProductRequest request, Product product,
-            Category category, String slug) {
+            Category category, String slug, boolean isNew) {
+
         product.setName(request.getName());
         product.setSlug(slug);
         product.setDescription(request.getDescription());
@@ -69,7 +70,9 @@ public class ProductHelper {
         product.setImageUrl(request.getImageUrl());
         product.setImagePublicId(request.getImagePublicId());
         product.setCategory(category);
-        product.setIsActive(true);
-        product.setIsAvailable(true);
+        if (isNew) {
+            product.setIsActive(true);
+            product.setIsAvailable(true);
+        }
     }
 }
