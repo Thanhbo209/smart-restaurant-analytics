@@ -34,12 +34,12 @@ CREATE TABLE orders (
     CONSTRAINT chk_valid_payment_status
         CHECK (payment_status IN ('UNPAID','PAID','PARTIALLY_PAID','REFUNDED')),
 
-    -- DINE_IN cannot be DELIVERED; DELIVERY cannot be SERVED
-    CONSTRAINT chk_dine_in_not_delivered
-        CHECK (type != 'DINE_IN' OR status != 'DELIVERED'),
-    CONSTRAINT chk_delivery_not_served
-        CHECK (type != 'DELIVERY' OR status != 'SERVED'),
-
+   -- Enforce full type/status compatibility
+   CONSTRAINT chk_type_status_compatibility CHECK (
+       (type = 'DINE_IN' AND status IN ('PENDING','CONFIRMED','PREPARING','READY','SERVED','COMPLETED','CANCELLED')) OR
+       (type = 'DELIVERY' AND status IN ('PENDING','CONFIRMED','PREPARING','READY','OUT_FOR_DELIVERY','DELIVERED','COMPLETED','CANCELLED')) OR
+       (type = 'TAKEAWAY' AND status IN ('PENDING','CONFIRMED','PREPARING','READY','COMPLETED','CANCELLED'))
+   ),
     -- Amounts must be non-negative
     CONSTRAINT chk_total_amount    CHECK (total_amount >= 0),
     CONSTRAINT chk_discount_amount CHECK (discount_amount >= 0),
