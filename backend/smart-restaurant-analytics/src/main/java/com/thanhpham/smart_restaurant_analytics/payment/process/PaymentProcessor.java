@@ -26,7 +26,17 @@ public class PaymentProcessor {
             PaymentMethod method,
             String note) {
 
+        if (amount == null || amount.signum() <= 0) {
+            throw new BusinessRuleException("Payment amount must be greater than zero.");
+        }
+
         guardAgainstInvalidPayment(order);
+
+        BigDecimal paidSoFar = paymentRepository.sumSuccessfulPaymentsByOrderId(order.getId());
+        BigDecimal remaining = order.getFinalAmount().subtract(paidSoFar);
+        if (amount.compareTo(remaining) > 0) {
+            throw new BusinessRuleException("Payment amount exceeds outstanding balance.");
+        }
 
         Payment payment = new Payment();
         payment.setOrder(order);
