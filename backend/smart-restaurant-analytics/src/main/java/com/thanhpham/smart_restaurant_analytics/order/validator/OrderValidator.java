@@ -28,7 +28,10 @@ public class OrderValidator {
 
     private void validateTypeConstraints(CreateOrderRequest request, List<String> violations) {
         OrderType type = request.getType();
-
+        if (type == null) {
+            violations.add("Order type is required");
+            return;
+        }
         switch (type) {
             case DINE_IN -> {
                 if (!StringUtils.hasText(request.getTableNumber())) {
