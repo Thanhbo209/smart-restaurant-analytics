@@ -59,6 +59,11 @@ public class OrderHelper {
             Product product = productRepository.findByIdWithCategory(req.getProductId())
                     .orElseThrow(() -> new ResourceNotFoundException("Product", req.getProductId()));
 
+            Integer quantity = req.getQuantity();
+            if (quantity == null || quantity <= 0) {
+                throw new BusinessRuleException("Quantity must be greater than zero.");
+            }
+
             if (!product.getIsActive()) {
                 throw new BusinessRuleException(
                         "Product is not active: " + product.getName());
@@ -74,8 +79,9 @@ public class OrderHelper {
             item.setProductName(product.getName()); // snapshot
             item.setPrice(product.getPrice()); // snapshot
             item.setQuantity(req.getQuantity());
+            item.setQuantity(quantity);
             item.setSubtotal(product.getPrice()
-                    .multiply(BigDecimal.valueOf(req.getQuantity())));
+                    .multiply(BigDecimal.valueOf(quantity)));
             return item;
         }).toList();
     }
