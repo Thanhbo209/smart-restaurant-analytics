@@ -48,6 +48,9 @@ public class OrderResponse {
                 .discountAmount(order.getDiscountAmount())
                 .finalAmount(order.getFinalAmount())
                 .notes(order.getNotes())
+                // loading items in the generic order response mapper.
+                // this turns list endpoints into an N+1 query path and scales payload size with
+                // page size.
                 .items(order.getItems().stream().map(OrderItemResponse::from).toList())
                 .createdAt(order.getCreatedAt())
                 .updatedAt(order.getUpdatedAt())
