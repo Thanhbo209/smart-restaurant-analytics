@@ -32,7 +32,8 @@ public class PaymentProcessor {
 
         guardAgainstInvalidPayment(order);
 
-        BigDecimal paidSoFar = paymentRepository.sumSuccessfulPaymentsByOrderId(order.getId());
+        BigDecimal paidSoFar = paymentRepository.sumSuccessfulPaymentsByOrderId(order.getId(),
+                PaymentResultStatus.SUCCESS);
         BigDecimal remaining = order.getFinalAmount().subtract(paidSoFar);
         if (amount.compareTo(remaining) > 0) {
             throw new BusinessRuleException("Payment amount exceeds outstanding balance.");
@@ -48,7 +49,8 @@ public class PaymentProcessor {
         Payment saved = paymentRepository.save(payment);
 
         // Recompute total paid after this payment is persisted
-        BigDecimal totalPaid = paymentRepository.sumSuccessfulPaymentsByOrderId(order.getId());
+        BigDecimal totalPaid = paymentRepository.sumSuccessfulPaymentsByOrderId(order.getId(),
+                PaymentResultStatus.SUCCESS);
         updatePaymentStatus(order, totalPaid);
 
         log.info("Payment processed: orderId={}, amount={}, totalPaid={}, paymentStatus={}",

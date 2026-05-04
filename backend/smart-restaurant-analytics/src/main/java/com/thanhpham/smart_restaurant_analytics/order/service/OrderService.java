@@ -136,17 +136,21 @@ public class OrderService {
     }
 
     public OrderResponse cancelOrder(Long id) {
+        Order order = orderRepository.findByIdForUpdate(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Order", id));
         if (paymentRepository.existsByOrderId(id)) {
             throw new BusinessRuleException(
                     "Cannot cancel order with existing payment records. Issue a refund instead.");
         }
-        return helper.applyTransition(id, OrderStatus.CANCELLED, "cancelled");
+        stateMachine.transition(order, OrderStatus.CANCELLED);
+        return OrderResponse.from(orderRepository.save(order));
     }
 
     // --- PAYMENT ---------------------------------------------------------
 
     public PaymentResponse payOrder(Long orderId, PayOrderRequest request) {
-        Order order = helper.findOrThrow(orderId);
+        Order order = orderRepository.findByIdForUpdate(orderId)
+                .orElseThrow(() -> new ResourceNotFoundException("Order", orderId));
 
         Payment payment = paymentProcessor.process(
                 order, request.getAmount(), request.getMethod(), request.getNote());
