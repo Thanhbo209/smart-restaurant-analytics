@@ -30,4 +30,18 @@ CREATE TABLE products (
     CONSTRAINT FKog2rp4qthbtt2lfyhfo32lsw9 FOREIGN KEY (category_id) REFERENCES categories(id)
 );
 
+INSERT INTO categories ( name, slug, is_active, created_at, updated_at)
+VALUES 
+( 'Main Dishes', 'main-dishes', true, now(), now()),
+('Drinks', 'drinks', true, now(), now());
+
+INSERT INTO products (
+     name, slug, price, cost, is_active, is_available,
+    category_id, created_at, updated_at
+)
+VALUES 
+('Fried Rice', 'fried-rice', 50000, 30000, true, true, 1, now(), now()),
+('Beef Noodle', 'beef-noodle', 60000, 35000, true, true, 1, now(), now()),
+('Milk Tea', 'milk-tea', 30000, 15000, true, true, 2, now(), now());
+
 CREATE INDEX idx_products_category_id ON products(category_id);
