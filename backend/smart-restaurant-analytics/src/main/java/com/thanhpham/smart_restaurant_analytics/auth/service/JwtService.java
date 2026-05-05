@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.util.Date;
 import java.util.Map;
 
@@ -80,8 +79,11 @@ public class JwtService {
         }
     }
 
-    private Key signingKey() {
-        return Keys.hmacShaKeyFor(
-                jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8));
+    private javax.crypto.SecretKey signingKey() {
+        byte[] keyBytes = jwtConfig.getSecret().getBytes(StandardCharsets.UTF_8);
+        if (keyBytes.length < 32) {
+            throw new IllegalStateException("jwt.secret must be at least 32 bytes for HS256");
+        }
+        return Keys.hmacShaKeyFor(keyBytes);
     }
 }
