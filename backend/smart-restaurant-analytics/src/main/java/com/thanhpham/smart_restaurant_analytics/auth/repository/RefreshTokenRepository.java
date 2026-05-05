@@ -31,7 +31,7 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     @Modifying
     @Query("""
             UPDATE RefreshToken r
-            SET r.revoke = true
+            SET r.revoked = true
             WHERE r.user.id = :userId
             AND r.deviceId = :deviceId
             AND r.revoked = false
