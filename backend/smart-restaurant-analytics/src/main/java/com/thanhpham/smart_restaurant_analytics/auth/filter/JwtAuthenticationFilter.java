@@ -49,6 +49,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
 
+        if (!"ACCESS".equals(claims.get("type"))) {
+            log.debug("Rejecting non-access JWT");
+            chain.doFilter(request, response);
+            return;
+        }
+
         String username = claims.getSubject();
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
