@@ -9,6 +9,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,6 +46,7 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','CASHIER','WAITER')")
     public ResponseEntity<ApiResponse<OrderResponse>> create(
             @RequestBody @Valid CreateOrderRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED)
@@ -52,11 +54,13 @@ public class OrderController {
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','CASHIER','WAITER','KITCHEN')")
     public ResponseEntity<ApiResponse<OrderResponse>> getById(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(orderService.getOrderById(id)));
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','CASHIER','WAITER','KITCHEN')")
     public ResponseEntity<ApiResponse<Page<OrderResponse>>> getAll(
             @RequestParam(required = false) OrderType type,
             @RequestParam(required = false) OrderStatus status,
@@ -74,42 +78,50 @@ public class OrderController {
     }
 
     @PostMapping("/{id}/confirm")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','CASHIER','WAITER')")
     public ResponseEntity<ApiResponse<OrderResponse>> confirm(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(orderService.confirmOrder(id), "Order confirmed"));
     }
 
     @PostMapping("/{id}/start-preparing")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','KITCHEN')")
     public ResponseEntity<ApiResponse<OrderResponse>> startPreparing(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(orderService.startPreparing(id), "Order is being prepared"));
     }
 
     @PostMapping("/{id}/ready")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','KITCHEN')")
     public ResponseEntity<ApiResponse<OrderResponse>> markReady(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(orderService.markReady(id), "Order is ready"));
     }
 
     @PostMapping("/{id}/serve")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','WAITER')")
     public ResponseEntity<ApiResponse<OrderResponse>> serve(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(orderService.serveOrder(id), "Order served"));
     }
 
     @PostMapping("/{id}/out-for-delivery")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','CASHIER')")
     public ResponseEntity<ApiResponse<OrderResponse>> outForDelivery(@PathVariable Long id) {
         return ResponseEntity.ok(
                 ApiResponse.success(orderService.markOutForDelivery(id), "Order out for delivery"));
     }
 
     @PostMapping("/{id}/deliver")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','CASHIER')")
     public ResponseEntity<ApiResponse<OrderResponse>> deliver(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(orderService.deliverOrder(id), "Order delivered"));
     }
 
     @PostMapping("/{id}/cancel")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER')")
     public ResponseEntity<ApiResponse<OrderResponse>> cancel(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(orderService.cancelOrder(id), "Order cancelled"));
     }
 
     @PostMapping("/{id}/pay")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','CASHIER')")
     public ResponseEntity<ApiResponse<PaymentResponse>> pay(
             @PathVariable Long id,
             @RequestBody @Valid PayOrderRequest request) {
@@ -117,6 +129,7 @@ public class OrderController {
     }
 
     @GetMapping("/{id}/payments")
+    @PreAuthorize("hasAnyRole('ADMIN','MANAGER','CASHIER')")
     public ResponseEntity<ApiResponse<List<PaymentResponse>>> getPayments(@PathVariable Long id) {
         return ResponseEntity.ok(ApiResponse.success(orderService.getPayments(id)));
     }
