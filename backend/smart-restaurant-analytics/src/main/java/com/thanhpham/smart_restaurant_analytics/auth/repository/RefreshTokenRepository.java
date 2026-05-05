@@ -27,4 +27,14 @@ public interface RefreshTokenRepository extends JpaRepository<RefreshToken, Long
     // Check active session count — rate-limit concurrent sessions if needed
     @Query("SELECT COUNT(r) FROM RefreshToken r WHERE r.user.id = :userId AND r.revoked = false AND r.expiresAt > :now")
     long countActiveSessions(@Param("userId") Long userId, @Param("now") LocalDateTime now);
+
+    @Modifying
+    @Query("""
+            UPDATE RefreshToken r
+            SET r.revoked = true
+            WHERE r.user.id = :userId
+            AND r.deviceId = :deviceId
+            AND r.revoked = false
+            """)
+    int revokeActiveByUserIdAndDevice(@Param("userId") Long userId, @Param("deviceId") String deviceId);
 }

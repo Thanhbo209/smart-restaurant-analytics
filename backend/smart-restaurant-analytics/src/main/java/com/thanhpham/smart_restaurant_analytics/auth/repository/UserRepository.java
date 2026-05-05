@@ -30,6 +30,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     int updateEnabled(@Param("id") Long id, @Param("enabled") boolean enabled);
 
     @Modifying
-    @Query("UPDATE User u SET u.accountNonLocked = :locked WHERE u.id = :id")
-    int updateAccountNonLocked(@Param("id") Long id, @Param("locked") boolean locked);
+    @Query("UPDATE User u SET u.accountNonLocked = :accountNonLocked WHERE u.id = :id")
+    int updateAccountNonLocked(@Param("id") Long id, @Param("locked") boolean accountNonLocked);
+
 }

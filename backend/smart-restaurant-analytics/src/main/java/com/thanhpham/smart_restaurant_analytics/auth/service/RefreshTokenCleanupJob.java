@@ -20,7 +20,7 @@ public class RefreshTokenCleanupJob {
     @Scheduled(cron = "0 0 3 * * *")
     @Transactional
     public void purgeExpiredTokens() {
-        LocalDateTime cutoff = LocalDateTime.now().minusDays(1);
+        LocalDateTime cutoff = LocalDateTime.now();
         int deleted = refreshTokenRepository.deleteExpiredBefore(cutoff);
         log.info("Purged {} expired refresh tokens", deleted);
     }

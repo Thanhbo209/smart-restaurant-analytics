@@ -7,6 +7,6 @@ import lombok.Getter;
 @Builder
 public class TokenResponse {
     private String accessToken;
-    private String refreshToken; // rotated on every refresh
+    private String refreshToken; // seconds
     private long accessTokenExpiresIn;
 }
