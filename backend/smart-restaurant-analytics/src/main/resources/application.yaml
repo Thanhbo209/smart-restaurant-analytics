@@ -8,3 +8,9 @@ spring:
   flyway:
     enabled: true
     locations: classpath:db/migration
+
+app:
+  jwt:
+    secret: ${JWT_SECRET:mySecretKeyForDevOnlyChangeInProductionMinimum512BitsLongStringHere12345678}
+    access-token-expiry: ${JWT_ACCESS_EXPIRY:900}
+    refresh-token-expiry: ${JWT_REFRESH_EXPIRY:604800}
