@@ -28,7 +28,11 @@ api.interceptors.response.use(
   (r) => r,
   async (error) => {
     const orig = error.config;
-    if (error.response?.status !== 401 || orig._retry)
+    if (
+      error.response?.status !== 401 ||
+      orig?._retry ||
+      orig?.url?.includes("/auth/refresh")
+    )
       return Promise.reject(error);
 
     if (isRefreshing) {
