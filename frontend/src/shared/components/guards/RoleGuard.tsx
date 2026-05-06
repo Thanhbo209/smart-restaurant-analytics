@@ -9,7 +9,16 @@ export function RoleGuard({
   allowed: Role[];
   children?: React.ReactNode;
 }) {
-  const role = useAppSelector((s) => s.auth.user?.role);
-  if (!role || !allowed.includes(role)) return <Navigate to="/login" replace />;
+  const { accessToken, user } = useAppSelector((s) => s.auth);
+  const location = useLocation();
+
+  if (!accessToken) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  if (!user?.role || !allowed.includes(user.role)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
   return children ? <>{children}</> : <Outlet />;
 }
