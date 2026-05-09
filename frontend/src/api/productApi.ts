@@ -7,4 +7,5 @@ export const productApi = {
   update: (id: number, body: unknown) => api.put(`/products/${id}`, body),
   toggleAvailability: (id: number, body: { isAvailable: boolean }) =>
     api.patch(`/products/${id}/availability`, body),
+  delete: (id: number) => api.delete(`/products/${id}`),
 };
