@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 @Component
 public class DateRangeValidator {
@@ -25,15 +24,16 @@ public class DateRangeValidator {
             throw new BusinessRuleException("endDate must not be before startDate");
         }
 
-        long days = java.time.temporal.ChronoUnit.DAYS.between(startDate, endDate);
+        long days = java.time.temporal.ChronoUnit.DAYS.between(startDate, endDate) + 1;
         if (days > MAX_DAILY_RANGE_DAYS) {
             throw new BusinessRuleException(
                     "Date range cannot exceed " + MAX_DAILY_RANGE_DAYS + " days for daily queries");
         }
 
+        // Half-open [start, endExclusive): repository queries should use `< :end`.
         return new LocalDateTime[] {
                 startDate.atStartOfDay(),
-                endDate.atTime(LocalTime.MAX)
+                endDate.plusDays(1).atStartOfDay()
         };
     }
 
