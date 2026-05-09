@@ -92,6 +92,7 @@ public interface ProductAnalyticsRepository extends JpaRepository<Order, Long> {
       org.springframework.data.domain.Pageable pageable);
 
   // Availability snapshot — no orders needed
+  // TODO: Implement out-of-stock tracking - Issue #TRACK-123
   @Query(value = """
       SELECT
           COUNT(*)                                            AS totalProducts,
@@ -99,17 +100,16 @@ public interface ProductAnalyticsRepository extends JpaRepository<Order, Long> {
           COUNT(*) FILTER (WHERE p.is_available = true
                            AND p.is_active = true)            AS availableProducts,
           COUNT(*) FILTER (WHERE p.is_available = false
-                           AND p.is_active = true)            AS unavailableProducts,
-          0                                                   AS outOfStock
+                           AND p.is_active = true)            AS unavailableProducts
       FROM products p
       """, nativeQuery = true)
   com.thanhpham.smart_restaurant_analytics.analytics.dto.projection.AvailabilitySummaryProjection findAvailabilitySummary();
 
+  // TODO: Implement stock tracking - Issue #TRACK-123
   @Query(value = """
-      SELECT p.id AS productId, p.name AS productName, 0 AS stock
+      SELECT p.id AS productId, p.name AS productName, NULL AS stock
       FROM products p
-      WHERE false
-        AND :threshold IS NOT NULL
+      WHERE :threshold IS NOT NULL
       """, nativeQuery = true)
   List<com.thanhpham.smart_restaurant_analytics.analytics.dto.projection.LowStockProjection> findLowStockProducts(
       @Param("threshold") int threshold);

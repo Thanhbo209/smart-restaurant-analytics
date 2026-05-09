@@ -234,14 +234,22 @@ public class AnalyticsService {
 
         public java.util.Map<String, Object> getAvailabilitySnapshot() {
                 var summary = productRepo.findAvailabilitySummary();
-                var lowStock = productRepo.findLowStockProducts(5);
+                // TODO: Implement stock tracking - Issue #TRACK-123
+                var lowStock = java.util.List.<com.thanhpham.smart_restaurant_analytics.analytics.dto.projection.LowStockProjection>of(); // Return
+                                                                                                                                          // empty
+                                                                                                                                          // list
+                                                                                                                                          // until
+                                                                                                                                          // stock
+                                                                                                                                          // tracking
+                                                                                                                                          // is
+                                                                                                                                          // implemented
 
                 java.util.Map<String, Object> result = new java.util.LinkedHashMap<>();
                 result.put("totalProducts", summary.getTotalProducts());
                 result.put("activeProducts", summary.getActiveProducts());
                 result.put("availableProducts", summary.getAvailableProducts());
                 result.put("unavailableProducts", summary.getUnavailableProducts());
-                result.put("outOfStock", summary.getOutOfStock());
+                result.put("outOfStock", summary.getOutOfStock()); // Will be null until implemented
                 result.put("lowStock", lowStock.stream()
                                 .map(i -> java.util.Map.of(
                                                 "productId", i.getProductId(),

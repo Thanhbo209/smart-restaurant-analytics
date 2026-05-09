@@ -10,9 +10,11 @@ export function formatCurrency(value?: number | null) {
 
 export function formatDate(date?: string | Date | null) {
   if (!date) return "—";
+  const dateObj = new Date(date);
+  if (isNaN(dateObj.getTime())) return "—";
 
   return new Intl.DateTimeFormat("vi-VN", {
     dateStyle: "medium",
     timeStyle: "short",
-  }).format(new Date(date));
+  }).format(dateObj);
 }

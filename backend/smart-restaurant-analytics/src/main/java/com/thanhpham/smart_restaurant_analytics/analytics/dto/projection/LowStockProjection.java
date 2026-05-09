@@ -5,5 +5,7 @@ public interface LowStockProjection {
 
     String getProductName();
 
+    // TODO: Implement stock tracking - Issue #TRACK-123
+    @org.springframework.lang.Nullable
     Integer getStock();
 }

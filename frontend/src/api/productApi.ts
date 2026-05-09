@@ -9,5 +9,3 @@ export const productApi = {
     api.patch(`/products/${id}/availability`, body),
   delete: (id: number) => api.delete(`/products/${id}`),
 };
-
-// fake DTO

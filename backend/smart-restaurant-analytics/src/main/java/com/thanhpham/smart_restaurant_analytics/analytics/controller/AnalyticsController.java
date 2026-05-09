@@ -77,6 +77,11 @@ public class AnalyticsController {
                                 PageRequest.of(page, Math.min(size, 100)))));
     }
 
+    /**
+     * Get product availability snapshot including total, active, available, unavailable products.
+     * Note: outOfStock and lowStock fields are not implemented yet.
+     * TODO: Implement stock tracking - Issue #TRACK-123
+     */
     @GetMapping("/products/availability")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getAvailability() {
         return ResponseEntity.ok(
