@@ -179,12 +179,13 @@ public class AnalyticsService {
                         LocalDate startDate, LocalDate endDate, int page, int size) {
 
                 LocalDateTime[] range = validator.validateDailyRange(startDate, endDate);
-                Pageable pageable = PageRequest.of(page, Math.min(size, 100));
+                int effectiveSize = Math.min(size, 100);
+                Pageable pageable = PageRequest.of(page, effectiveSize);
 
                 Page<TopCustomerProjection> result = customerRepo.findTopCustomers(range[0], range[1], pageable);
 
                 List<TopCustomerResponse.Item> items = new ArrayList<>();
-                int rank = page * size + 1;
+                int rank = page * effectiveSize + 1;
                 for (TopCustomerProjection r : result.getContent()) {
                         items.add(new TopCustomerResponse.Item(
                                         rank++,
